@@ -1,1 +1,1 @@
-# Zadanie_VSMS
+# Generátor inverznej kinematiky
