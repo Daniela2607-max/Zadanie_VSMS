@@ -27,7 +27,18 @@ def solve_inverse_kinematics(robot_id, target_pos, target_ori, ee_index,
         residualThreshold=1e-4
     )
     return joint_angles
-
+# --- Vykreslenie pracovného priestoru robota ---
+def draw_workspace(x_range, y_range, z_range, resolution=0.1):
+    points = []
+    for x in np.arange(x_range[0], x_range[1], resolution):
+        for y in np.arange(y_range[0], y_range[1], resolution):
+            for z in np.arange(z_range[0], z_range[1], resolution):
+                points.append([x, y, z])
+    p.addUserDebugPoints(
+        pointPositions=points,
+        pointColorsRGB=[[0.4, 0.7, 1.0]] * len(points),
+        pointSize=3
+    )
 if __name__ == "__main__":
     # Pripojenie do simulácie
     p.connect(p.GUI)
@@ -57,8 +68,16 @@ if __name__ == "__main__":
     joint_ranges = [2.0, 2.0] + [5.8] * (num_joints - 2)
     rest_poses = [0, -0.5, 0, 1.0, 0, 0.5, 0]
 
-    last_pos = None  # kreslenie trajektórie
+     # --- Vykreslenie pracovného priestoru pre KUKA LBR iiwa ---
+    # Reálne hranice pracovného priestoru pre KUKA LBR iiwa
+    x_bounds = (0.5, 1.1)
+    y_bounds = (-0.5, 0.5)
+    z_bounds = (0.4, 1.2)
 
+    draw_workspace(x_bounds, y_bounds, z_bounds, resolution=0.1)
+
+    last_pos = None  # kreslenie trajektórie
+    
     # Presun na 15 náhodných cieľových pozícií
     for i in range(15):
         target_position = generate_random_pose()
