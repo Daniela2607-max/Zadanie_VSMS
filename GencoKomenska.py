@@ -4,14 +4,14 @@ import numpy as np
 import time
 import random
 
-# Generate a random target position (upper workspace, farther from base)
+# Generovanie náhodnej cieľovej pozície (horná pracovná oblasť, ďalej od základne)
 def generate_random_pose():
-    x = random.uniform(0.7, 1.0)       # forward
-    y = random.uniform(-0.3, 0.3)      # side
-    z = random.uniform(0.6, 0.9)       # upper space
+    x = random.uniform(0.7, 1.0)       # predná pracovná oblasť
+    y = random.uniform(-0.3, 0.3)      # bočná pracovná oblasť
+    z = random.uniform(0.6, 0.9)       # horná pracovná oblasť
     return [x, y, z]
 
-# Solve inverse kinematics using PyBullet's built-in function
+# Riešenie inverznej kinematiky pomocou vstavaných funkcií knižnice PyBullet
 def solve_inverse_kinematics(robot_id, target_pos, target_ori, ee_index,
                              lower_limits, upper_limits, joint_ranges, rest_poses):
     joint_angles = p.calculateInverseKinematics(
@@ -29,12 +29,12 @@ def solve_inverse_kinematics(robot_id, target_pos, target_ori, ee_index,
     return joint_angles
 
 if __name__ == "__main__":
-    # Connect to simulation
+    # Pripojenie do simulácie
     p.connect(p.GUI)
     p.setAdditionalSearchPath(pybullet_data.getDataPath())
     p.setGravity(0, 0, -9.81)
 
-    # Load ground and robot
+    # Načítanie robota
     p.loadURDF("plane.urdf")
     robot_id = p.loadURDF(
         "kuka_iiwa/model.urdf",
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         useFixedBase=True
     )
 
-    # Robot setup
+    # Nastavenia robota
     num_joints = p.getNumJoints(robot_id)
     end_effector_index = 6
     print("Number of joints:", num_joints)
@@ -51,20 +51,20 @@ if __name__ == "__main__":
     for joint in range(num_joints):
         p.resetJointState(robot_id, joint, 0)
 
-    # Define joint constraints and rest pose
+    # Definovanie obmedzení kĺbov a východiskovej polohy
     lower_limits = [-1.0, -1.0] + [-2.9] * (num_joints - 2)
     upper_limits = [1.0, 1.0] + [2.9] * (num_joints - 2)
     joint_ranges = [2.0, 2.0] + [5.8] * (num_joints - 2)
     rest_poses = [0, -0.5, 0, 1.0, 0, 0.5, 0]
 
-    last_pos = None  # for drawing trajectory
+    last_pos = None  # kreslenie trajektórie
 
-    # Move to 15 random target positions
+    # Presun na 15 náhodných cieľových pozícií
     for i in range(15):
         target_position = generate_random_pose()
-        target_orientation = p.getQuaternionFromEuler([np.pi, 0, 0])  # flip end-effector
+        target_orientation = p.getQuaternionFromEuler([np.pi, 0, 0])  # otočenie efektora robota
 
-        # Calculate joint angles using IK
+        # Výpočet uhlov kĺbov pomocou inverznej kinematiky (IK)
         joint_angles = solve_inverse_kinematics(
             robot_id,
             target_position,
@@ -76,7 +76,7 @@ if __name__ == "__main__":
             rest_poses
         )
 
-        # Smooth motion simulation
+        # Simulácia plynulého pohybu
         for step in range(240):
             for j in range(num_joints):
                 p.setJointMotorControl2(
@@ -89,7 +89,7 @@ if __name__ == "__main__":
             p.stepSimulation()
             time.sleep(1 / 240)
 
-            # Track and draw trajectory
+            # Sledovanie a vykreslenie trajektórie
             ee_state = p.getLinkState(robot_id, end_effector_index)
             ee_pos = ee_state[0]
 
