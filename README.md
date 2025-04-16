@@ -17,7 +17,7 @@ Projekt je vytvorený v prostredí Python 3.x a závisí od nasledovných knižn
 - `matplotlib`
 
 ## Spustenie
-tu dačo ide python atd 
+python GencoKomenska.py
 
 Po spustení sa otvorí PyBullet GUI, v ktorom prebehne simulácia vykonania inverznej kinematiky pre náhodne vygenerované pozície. Robot sa bude pohybovať podľa vypočítaných konfigurácií a následne sa vygeneruje vizualizácia pohybu.
 
