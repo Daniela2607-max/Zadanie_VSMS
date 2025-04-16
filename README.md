@@ -14,7 +14,6 @@ Tento program obsahuje zdrojové kódy a súbory k projektu s názvom:
 Projekt je vytvorený v prostredí Python 3.x a závisí od nasledovných knižníc:
 - `pybullet`
 - `numpy`
-- `matplotlib`
 
 ## Spustenie
 python GencoKomenska.py
