@@ -2,7 +2,7 @@
 
 Tento program obsahuje zdrojové kódy a súbory k projektu s názvom:
 
-**"Generátor inverznej kinematiky pre robota KUKA LBR iiwa"**
+**"Generátor inverznej kinematiky"**
 
 ## Obsah
 - Generovanie inverznej kinematiky pre 7-DOF robota
